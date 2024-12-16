@@ -18,7 +18,7 @@ def create_table(conn):
                                     title text NOT NULL,
                                     price text NOT NULL,
                                     link text NOT NULL,
-                                    review text,
+                                    reviews text,
                                     discount text
                                ); """
         conn.execute(sql_create_table)
@@ -27,7 +27,7 @@ def create_table(conn):
 
 def insert_product(conn, product):
     """ inserindo um novo produto na tabela 'products' """
-    sql_insert = ''' INSERT INTO products(title,price,link,review,discount)
+    sql_insert = ''' INSERT INTO products(title,price,link,reviews,discount)
                      VALUES(?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql_insert, product)

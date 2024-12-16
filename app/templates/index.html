@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pesquisa Mercado Livre</title>
+    <script>
+        function validateForm() {
+            var query = document.forms["searchForm"]["query"].value;
+            if (query.trim() === "") {
+                alert("Por favor, digite o item que está procurando!");
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Pesquisa Mercado Livre</h1>
+    <form name="searchForm" action="/search" method="post" onsubmit="return validateForm()">
+        <input type="text" name="query" placeholder="Digite sua pesquisa...">
+        <button type="submit">Buscar</button>
+    </form>
+    {% if results %}
+    <h2>Resultados:</h2>
+    <ul>
+        {% for product in results %}
+        <li><strong>{{ product[0] }}</strong> - {{ product[1] }} - <a href="{{ product[2] }}">Ver no Mercado Livre</a> - Avalições: {{ product[3] }} - Desconto: {{ product[4] }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>
