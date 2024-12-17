@@ -17,7 +17,7 @@ def clear_table(conn):
     except sqlite3.Error as e:
         print(e)
 
-def scrape_data(query):
+def scrape_data(query, quantity):
     # Configurando navegador
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service)
@@ -37,7 +37,7 @@ def scrape_data(query):
     clear_table(conn)
 
     # Capturar os dados dos itens
-    for item in items[:10]:
+    for item in items[:int(quantity)]:
         try:
             title = item.find_element(By.CSS_SELECTOR, ".poly-component__brand").text
             price_fraction = item.find_element(By.CSS_SELECTOR, ".andes-money-amount__fraction").text
@@ -63,8 +63,7 @@ def scrape_data(query):
     driver.quit() 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         query = sys.argv[1]
-        scrape_data(query)
-    else:
-        print("Erro: nenhum termo de busca fornecido!")
+        quantity = sys.argv[2]
+        scrape_data(query, quantity)

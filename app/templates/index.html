@@ -3,29 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Pesquisa Mercado Livre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
     <script>
         function validateForm() {
             var query = document.forms["searchForm"]["query"].value;
+            var quantity = document.forms["searchForm"]["quantity"].value;
             if (query.trim() === "") {
-                alert("Por favor, digite o item que está procurando!");
+                alert("Por favor, digite o item que deseja buscar!");
+                return false;
+            }
+            if (quantity.trim() === "" || isNaN(quantity) || quantity < 10 || quantity > 100) {
+                alert("Por favor, digite uma quantidade de itens entre 10 e 100!");
                 return false;
             }
         }
     </script>
 </head>
 <body>
-    <h1>Pesquisa Mercado Livre</h1>
-    <form name="searchForm" action="/search" method="post" onsubmit="return validateForm()">
-        <input type="text" name="query" placeholder="Digite sua pesquisa...">
-        <button type="submit">Buscar</button>
-    </form>
-    {% if results %}
-    <h2>Resultados:</h2>
-    <ul>
-        {% for product in results %}
-        <li><strong>{{ product[0] }}</strong> - {{ product[1] }} - <a href="{{ product[2] }}">Ver no Mercado Livre</a> - Avalições: {{ product[3] }} - Desconto: {{ product[4] }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+    <header>
+        <div class="container">
+            <img src="/static/img/logo-mercadolivre.png" alt="Logo Mercado Livre">
+            <h1>Pesquisa Mercado Livre</h1>
+        </div>
+    </header>
+    
+    <div class="container">
+        {% if message %}
+        <div>
+            {{ message }}
+        </div>
+        {% endif %}
+        <form name="searchForm" action="/search" method="post" onsubmit="return validateForm()">
+            <div class="form-group">
+                <div class="input-group">
+                    <div>
+                        <label for="query">Produto:</label>
+                        <input type="text" name="query" placeholder="Digite sua pesquisa...">
+                    </div>
+                    <div>
+                        <label for="quantity">Quantidade:</label>
+                        <input type="number" name="quantity" min="10" max="100" value="10" placeholder="Quantidade de itens">    
+                    </div>        
+                </div>
+            </div>
+            <button type="submit">Buscar</button>
+        </form>
+        {% if results %}
+        <h2>Resultados:</h2>
+        <ul>
+            {% for product in results %}
+            <li><strong>{{ product[0] }}</strong> - {{ product[1] }} - <a href="{{ product[2] }}">Ver no Mercado Livre</a> - Avalições: {{ product[3] }} - Desconto: {{ product[4] }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
 </body>
 </html>
