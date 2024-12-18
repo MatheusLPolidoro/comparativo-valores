@@ -16,10 +16,14 @@ def create_table(conn):
         sql_create_table = """ CREATE TABLE IF NOT EXISTS products (
                                     id integer PRIMARY KEY,
                                     title text NOT NULL,
+                                    description text,
                                     price text NOT NULL,
                                     link text NOT NULL,
                                     reviews text,
-                                    discount text
+                                    rating text,
+                                    discount text,
+                                    seller text,
+                                    installments text
                                ); """
         conn.execute(sql_create_table)
     except sqlite3.Error as e:
@@ -27,8 +31,8 @@ def create_table(conn):
 
 def insert_product(conn, product):
     """ inserindo um novo produto na tabela 'products' """
-    sql_insert = ''' INSERT INTO products(title,price,link,reviews,discount)
-                     VALUES(?,?,?,?,?) '''
+    sql_insert = ''' INSERT INTO products(title, description, price, link, reviews, rating, discount, seller, installments)
+                     VALUES(?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql_insert, product)
     conn.commit()

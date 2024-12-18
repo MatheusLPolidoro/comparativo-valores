@@ -27,12 +27,24 @@ def search():
     database = "database/database.db"
     conn = create_connection(database)
     cur = conn.cursor()
-    cur.execute("SELECT title, price, link, reviews, discount FROM products")
+    cur.execute("SELECT title, description, price, link, reviews, rating, discount, seller, installments FROM products")
     results = cur.fetchall()
+
+    # Calculando a média dos preços
+    prices = []
+    for result in results:
+        try:
+            price_str = result[2].replace('R$', '').strip().replace('.', '').replace(',', '.')
+            prices.append(float(price_str))
+        except ValueError:
+            pass
+
+    average_price = sum(prices) / len(prices) if prices else 0
+
     if results:
         message = "Busca realizada com sucesso!"
         message_type = "success"
     else:
         message = "Nenhum resultado encontrado!"
         message_type = "error"
-    return render_template('index.html', results=results, message=message, message_type=message_type)
+    return render_template('index.html', results=results, message=message, message_type=message_type, average_price=average_price)

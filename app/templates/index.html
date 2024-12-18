@@ -5,20 +5,7 @@
     <title>Pesquisa Mercado Livre</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
-    <script>
-        function validateForm() {
-            var query = document.forms["searchForm"]["query"].value;
-            var quantity = document.forms["searchForm"]["quantity"].value;
-            if (query.trim() === "") {
-                alert("Por favor, digite o item que deseja buscar!");
-                return false;
-            }
-            if (quantity.trim() === "" || isNaN(quantity) || quantity < 10 || quantity > 100) {
-                alert("Por favor, digite uma quantidade de itens entre 10 e 100!");
-                return false;
-            }
-        }
-    </script>
+    <script src="/static/js/script.js"></script>
 </head>
 <body>
     <header>
@@ -30,8 +17,13 @@
     
     <div class="container">
         {% if message %}
-        <div>
+        <div class="message {{ message_type }}">
             {{ message }}
+        </div>
+        {% endif %}
+        {% if average_price %}
+        <div class="average-price">
+            <h2>Valor Médio: R$ {{ "%.2f" % average_price }}</h2>
         </div>
         {% endif %}
         <form name="searchForm" action="/search" method="post" onsubmit="return validateForm()">
@@ -53,7 +45,17 @@
         <h2>Resultados:</h2>
         <ul>
             {% for product in results %}
-            <li><strong>{{ product[0] }}</strong> - {{ product[1] }} - <a href="{{ product[2] }}">Ver no Mercado Livre</a> - Avalições: {{ product[3] }} - Desconto: {{ product[4] }}</li>
+            <li>
+                <strong>Título:</strong> {{ product[0] }}<br> 
+                <strong>Descrição:</strong> {{ product[1] }}<br> 
+                <strong>Preço:</strong> {{ product[2] }}<br> 
+                <strong>Link:</strong> <a href="{{ product[3] }}">Ver no Mercado Livre</a><br> 
+                <strong>Avaliações:</strong> {{ product[4] }}<br> 
+                <strong>Avaliação:</strong> {{ product[5] }}<br> 
+                <strong>Desconto:</strong> {{ product[6] }}<br> 
+                <strong>Vendedor:</strong> {{ product[7] }}<br> 
+                <strong>Parcelas:</strong> {{ product[8] }}
+            </li>
             {% endfor %}
         </ul>
         {% endif %}
